@@ -508,6 +508,35 @@
       </div>
     </div>
 
+    <!-- Settings Modal -->
+<div class="leaderboard-modal" id="settingsModal">
+  <div class="leaderboard-content">
+    <div class="leaderboard-header">
+      <h2 class="leaderboard-title" data-i18n="settingsTitle">⚙️ Settings</h2>
+      <button class="close-btn" onclick="closeSettings()">×</button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <!-- Language -->
+      <div>
+        <label for="languageSelect" class="stat-label" data-i18n="languageLabel">Language</label>
+        <select id="languageSelect" class="btn btn-secondary" onchange="changeLanguage(this.value)">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="ru">Русский</option>
+        </select>
+      </div>
+
+      <!-- Volume -->
+      <div>
+        <label for="volumeSlider" class="stat-label" data-i18n="volumeLabel">Music Volume</label>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" oninput="updateVolume(this.value)">
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <script>
   if (window.Telegram && window.Telegram.WebApp) {
     const tg = window.Telegram.WebApp;
