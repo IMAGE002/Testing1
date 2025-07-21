@@ -667,6 +667,98 @@
       `;
 
       leaderboardList.appendChild(item);
+    };
+
+    window.openSettings = function () {
+  document.getElementById('settingsModal').classList.add('active');
+  window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+};
+
+window.closeSettings = function () {
+  document.getElementById('settingsModal').classList.remove('active');
+  window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+};
+
+window.changeLanguage = function (lang) {
+  localStorage.setItem('lang', lang);
+  applyTranslations(lang);
+};
+
+window.updateVolume = function (value) {
+  localStorage.setItem('volume', value);
+  // You can link this to your game's audio system
+  console.log(`Master volume set to ${value}`);
+};
+
+// 🈯 Language Dictionary (expand as needed)
+const translations = {
+  en: {
+    settingsTitle: "⚙️ Settings",
+    languageLabel: "Language",
+    volumeLabel: "Music Volume",
+    'Welcome Back!': "Welcome Back!",
+    'Manage your subscription and explore features': "Manage your subscription and explore features",
+    'Active Days': "Active Days",
+    'Points': "Points",
+    'Tier': "Tier",
+    'View Dashboard': "View Dashboard",
+    'Settings': "Settings"
+  },
+  es: {
+    settingsTitle: "⚙️ Ajustes",
+    languageLabel: "Idioma",
+    volumeLabel: "Volumen de música",
+    'Welcome Back!': "¡Bienvenido!",
+    'Manage your subscription and explore features': "Administra tu suscripción y explora funciones",
+    'Active Days': "Días Activos",
+    'Points': "Puntos",
+    'Tier': "Categoría",
+    'View Dashboard': "Ver Panel",
+    'Settings': "Ajustes"
+  },
+  ru: {
+    settingsTitle: "⚙️ Настройки",
+    languageLabel: "Язык",
+    volumeLabel: "Громкость музыки",
+    'Welcome Back!': "С возвращением!",
+    'Manage your subscription and explore features': "Управляй подпиской и исследуй функции",
+    'Active Days': "Активные дни",
+    'Points': "Очки",
+    'Tier': "Уровень",
+    'View Dashboard': "Панель",
+    'Settings': "Настройки"
+  }
+};
+
+function applyTranslations(lang) {
+  const dictionary = translations[lang] || translations['en'];
+
+  // Replace elements with data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dictionary[key]) {
+      el.textContent = dictionary[key];
+    }
+  });
+
+  // Replace static text (like titles/buttons)
+  const staticKeys = Object.keys(dictionary).filter(k => !k.includes('.'));
+  staticKeys.forEach(original => {
+    const nodes = Array.from(document.querySelectorAll("*")).filter(el => el.childNodes.length === 1 && el.childNodes[0].nodeType === 3 && el.textContent.trim() === original);
+    nodes.forEach(node => {
+      node.textContent = dictionary[original];
     });
+  });
+}
+
+// Load saved preferences
+window.addEventListener('DOMContentLoaded', () => {
+  const savedLang = localStorage.getItem('lang') || 'en';
+  applyTranslations(savedLang);
+  document.getElementById('languageSelect').value = savedLang;
+
+  const savedVolume = localStorage.getItem('volume') || '1';
+  document.getElementById('volumeSlider').value = savedVolume;
+});
   }
 </script>
