@@ -551,7 +551,6 @@
 
   let isMenuOpen = false;
 
-  // ✅ Make toggleMenu globally accessible
   window.toggleMenu = function () {
     const cube = document.querySelector('.hamburger-cube');
     const menuItems = document.getElementById('menuItems');
@@ -590,15 +589,14 @@
     window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
   };
 
-  // ✅ Make this global for View Dashboard button
   window.handlePrimaryAction = function () {
     window.openLeaderboard();
     window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
   };
 
-  // ✅ Also make secondary action global if used inline
   window.handleSecondaryAction = function () {
     console.log('Settings clicked');
+    window.openSettings();
     window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
   };
 
@@ -614,128 +612,145 @@
   };
 
   function generateLeaderboardData() {
-  const leaderboardList = document.getElementById('leaderboardList');
-  const players = [
-    { name: 'CryptoKing', points: 15420 },
-    { name: 'DiamondHands', points: 14890 },
-    { name: 'MoonRider', points: 13760 },
-    { name: 'BlockchainBoss', points: 12450 },
-    { name: 'TokenMaster', points: 11980 },
-    // ye
-  ];
+    const leaderboardList = document.getElementById('leaderboardList');
+    const players = [
+      { name: 'CryptoKing', points: 15420 },
+      { name: 'DiamondHands', points: 14890 },
+      { name: 'MoonRider', points: 13760 },
+      { name: 'BlockchainBoss', points: 12450 },
+      { name: 'TokenMaster', points: 11980 },
+      { name: 'DeFiLord', points: 11230 },
+      { name: 'NftCollector', points: 10890 },
+      { name: 'CoinHunter', points: 10450 },
+      { name: 'StakeHolder', points: 9870 },
+      { name: 'TradeGuru', points: 9560 },
+      { name: 'YieldFarmer', points: 9120 },
+      { name: 'LiquidityPro', points: 8760 },
+      { name: 'FlashLoan', points: 8450 },
+      { name: 'GasOptimizer', points: 8120 },
+      { name: 'SmartContract', points: 7890 },
+      { name: 'NodeRunner', points: 7560 },
+      { name: 'ValidatorX', points: 7230 },
+      { name: 'BridgeMaster', points: 6980 },
+      { name: 'SwapKing', points: 6750 },
+      { name: 'PoolProvider', points: 6420 },
+      { name: 'GovernanceVoter', points: 6180 },
+      { name: 'RewardHunter', points: 5950 },
+      { name: 'APYMaximizer', points: 5720 },
+      { name: 'RiskManager', points: 5490 },
+      { name: 'AlphaSeeker', points: 5260 },
+      { name: 'BetaTester', points: 5030 },
+      { name: 'EarlyAdopter', points: 4800 },
+      { name: 'InnovatorHub', points: 4570 },
+      { name: 'TechPioneer', points: 4340 },
+      { name: 'FutureBuilder', points: 4110 }
+    ];
 
-  leaderboardList.innerHTML = '';
+    leaderboardList.innerHTML = '';
 
-  players.forEach((player, index) => {
-    const rank = index + 1;
-    const isTopThree = rank <= 3;
-    const initials = player.name.substring(0, 2).toUpperCase();
+    players.forEach((player, index) => {
+      const rank = index + 1;
+      const isTopThree = rank <= 3;
+      const initials = player.name.substring(0, 2).toUpperCase();
 
-    const item = document.createElement('div');
-    item.className = 'leaderboard-item';
-    item.innerHTML = `
-      <div class="leaderboard-rank ${isTopThree ? 'top-3' : ''}">${rank}</div>
-      <div class="leaderboard-avatar">${initials}</div>
-      <div class="leaderboard-info">
-        <div class="leaderboard-name">${player.name}</div>
-        <div class="leaderboard-points">${player.points.toLocaleString()}</div>
-      </div>
-    `;
-
-    leaderboardList.appendChild(item);
-  });
-}
-
- window.openSettings = function () {
-  document.getElementById('settingsModal').classList.add('active');
-  window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-};
-
-window.closeSettings = function () {
-  document.getElementById('settingsModal').classList.remove('active');
-  window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-};
-
-window.changeLanguage = function (lang) {
-  localStorage.setItem('lang', lang);
-  applyTranslations(lang);
-};
-
-window.updateVolume = function (value) {
-  localStorage.setItem('volume', value);
-  // You can link this to your game's audio system
-  console.log(Master volume set to ${value});
-};
-
-// 🈯 Language Dictionary (expand as needed)
-const translations = {
-  en: {
-    settingsTitle: "⚙️ Settings",
-    languageLabel: "Language",
-    volumeLabel: "Music Volume",
-    'Welcome Back!': "Welcome Back!",
-    'Manage your subscription and explore features': "Manage your subscription and explore features",
-    'Active Days': "Active Days",
-    'Points': "Points",
-    'Tier': "Tier",
-    'View Dashboard': "View Dashboard",
-    'Settings': "Settings"
-  },
-  es: {
-    settingsTitle: "⚙️ Ajustes",
-    languageLabel: "Idioma",
-    volumeLabel: "Volumen de música",
-    'Welcome Back!': "¡Bienvenido!",
-    'Manage your subscription and explore features': "Administra tu suscripción y explora funciones",
-    'Active Days': "Días Activos",
-    'Points': "Puntos",
-    'Tier': "Categoría",
-    'View Dashboard': "Ver Panel",
-    'Settings': "Ajustes"
-  },
-  ru: {
-    settingsTitle: "⚙️ Настройки",
-    languageLabel: "Язык",
-    volumeLabel: "Громкость музыки",
-    'Welcome Back!': "С возвращением!",
-    'Manage your subscription and explore features': "Управляй подпиской и исследуй функции",
-    'Active Days': "Активные дни",
-    'Points': "Очки",
-    'Tier': "Уровень",
-    'View Dashboard': "Панель",
-    'Settings': "Настройки"
+      const item = document.createElement('div');
+      item.className = 'leaderboard-item';
+      item.innerHTML = `
+        <div class="leaderboard-rank ${isTopThree ? 'top-3' : ''}">${rank}</div>
+        <div class="leaderboard-avatar">${initials}</div>
+        <div class="leaderboard-info">
+          <div class="leaderboard-name">${player.name}</div>
+          <div class="leaderboard-points">${player.points.toLocaleString()}</div>
+        </div>
+      `;
+      leaderboardList.appendChild(item);
+    });
   }
-};
 
-function applyTranslations(lang) {
-  const dictionary = translations[lang] || translations['en'];
+  window.openSettings = function () {
+    document.getElementById('settingsModal').classList.add('active');
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+  };
 
-  // Replace elements with data-i18n
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (dictionary[key]) {
-      el.textContent = dictionary[key];
+  window.closeSettings = function () {
+    document.getElementById('settingsModal').classList.remove('active');
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+  };
+
+  window.changeLanguage = function (lang) {
+    localStorage.setItem('lang', lang);
+    applyTranslations(lang);
+  };
+
+  window.updateVolume = function (value) {
+    localStorage.setItem('volume', value);
+    console.log(`Master volume set to ${value}`);
+  };
+
+  const translations = {
+    en: {
+      settingsTitle: "⚙️ Settings",
+      languageLabel: "Language",
+      volumeLabel: "Music Volume",
+      'Welcome Back!': "Welcome Back!",
+      'Manage your subscription and explore features': "Manage your subscription and explore features",
+      'Active Days': "Active Days",
+      'Points': "Points",
+      'Tier': "Tier",
+      'View Dashboard': "View Dashboard",
+      'Settings': "Settings"
+    },
+    es: {
+      settingsTitle: "⚙️ Ajustes",
+      languageLabel: "Idioma",
+      volumeLabel: "Volumen de música",
+      'Welcome Back!': "¡Bienvenido!",
+      'Manage your subscription and explore features': "Administra tu suscripción y explora funciones",
+      'Active Days': "Días Activos",
+      'Points': "Puntos",
+      'Tier': "Categoría",
+      'View Dashboard': "Ver Panel",
+      'Settings': "Ajustes"
+    },
+    ru: {
+      settingsTitle: "⚙️ Настройки",
+      languageLabel: "Язык",
+      volumeLabel: "Громкость музыки",
+      'Welcome Back!': "С возвращением!",
+      'Manage your subscription and explore features': "Управляй подпиской и исследуй функции",
+      'Active Days': "Активные дни",
+      'Points': "Очки",
+      'Tier': "Уровень",
+      'View Dashboard': "Панель",
+      'Settings': "Настройки"
     }
-  });
+  };
 
-  // Replace static text (like titles/buttons)
-  const staticKeys = Object.keys(dictionary).filter(k => !k.includes('.'));
-  staticKeys.forEach(original => {
-    const nodes = Array.from(document.querySelectorAll("*")).filter(el => el.childNodes.length === 1 && el.childNodes[0].nodeType === 3 && el.textContent.trim() === original);
-    nodes.forEach(node => {
-      node.textContent = dictionary[original];
+  function applyTranslations(lang) {
+    const dictionary = translations[lang] || translations['en'];
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dictionary[key]) {
+        el.textContent = dictionary[key];
+      }
     });
-  });
-}
 
-// Load saved preferences
-window.addEventListener('DOMContentLoaded', () => {
-  const savedLang = localStorage.getItem('lang') || 'en';
-  applyTranslations(savedLang);
-  document.getElementById('languageSelect').value = savedLang;
-
-  const savedVolume = localStorage.getItem('volume') || '1';
-  document.getElementById('volumeSlider').value = savedVolume;
+    const staticKeys = Object.keys(dictionary).filter(k => !k.includes('.'));
+    staticKeys.forEach(original => {
+      const nodes = Array.from(document.querySelectorAll("*")).filter(el => el.childNodes.length === 1 && el.childNodes[0].nodeType === 3 && el.textContent.trim() === original);
+      nodes.forEach(node => {
+        node.textContent = dictionary[original];
+      });
     });
   }
-</script> 
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('lang') || 'en';
+    applyTranslations(savedLang);
+    document.getElementById('languageSelect').value = savedLang;
+
+    const savedVolume = localStorage.getItem('volume') || '1';
+    document.getElementById('volumeSlider').value = savedVolume;
+  });
+</script>
