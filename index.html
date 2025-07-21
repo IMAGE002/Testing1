@@ -1,188 +1,643 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Monster Game Mini App</title>
-  <style>
-    :root {
-      --primary-color: #2a5298;
-      --secondary-color: #1e3c72;
-      --accent-color: #f2e863;
-      --text-color: #ffffff;
-      --background-color: #f0f8ff;
-      --card-color: #dbe9f4;
-      --border-radius: 20px;
-    }
-
-    [data-theme="dark"] {
-      --background-color: #1a1a2e;
-      --text-color: #ffffff;
-      --card-color: #243a73;
-      --primary-color: #00a8cc;
-      --secondary-color: #0078cf;
-      --accent-color: #f2e863;
-    }
-
-    body {
-      font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--background-color);
-      color: var(--text-color);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      transition: background-color 0.3s;
-    }
-
-    .container {
-      text-align: center;
-      padding: 2rem;
-      background: var(--card-color);
-      border-radius: var(--border-radius);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-      width: 90%;
-      max-width: 400px;
-    }
-
-    .title {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      color: var(--primary-color);
-    }
-
-    .message {
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-    }
-
-    .btn {
-      background-color: var(--accent-color);
-      color: #000;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: var(--border-radius);
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .btn:hover {
-      background-color: #ffe600;
-    }
-
-    .dashboard-panel {
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      color: #333;
-      padding: 1.5rem;
-      border-radius: var(--border-radius);
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      z-index: 99;
-      display: none;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .dashboard-title {
-      font-size: 1.3rem;
-      color: var(--primary-color);
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-
-    .leaderboard {
-      max-height: 300px;
-      overflow-y: auto;
-      border-top: 1px solid #eee;
-      border-bottom: 1px solid #eee;
-      padding: 0.5rem 0;
-    }
-
-    .leaderboard-entry {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5rem 0.5rem;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 0.95rem;
-    }
-
-    .leaderboard-entry:nth-child(1) {
-      font-weight: bold;
-      color: var(--primary-color);
-    }
-
-    .close-dashboard {
-      margin-top: 1rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1 class="title">👾 Welcome!</h1>
-    <p class="message">Thanks for subscribing. Have a nice game!</p>
-    <button class="btn" onclick="handlePrimaryAction()">🎮 View Dashboard</button>
-  </div>
-
-  <div class="dashboard-panel" id="dashboardPanel">
-    <h2 class="dashboard-title">🏆 Top Players</h2>
-    <div class="leaderboard" id="leaderboardList">
-      <!-- Player rows inserted here -->
-    </div>
-    <button class="btn close-dashboard" onclick="closeDashboard()">Close</button>
-  </div>
-
-  <script>
-    function setTheme() {
-      const theme = window.Telegram?.WebApp?.colorScheme || 'light';
-      document.documentElement.setAttribute('data-theme', theme);
-    }
-
-    function handlePrimaryAction() {
-      if (window.Telegram?.WebApp) {
-        window.Telegram.WebApp.HapticFeedback?.impactOccurred('medium');
+<html>
+  <head>
+    <title>Telegram Mini App Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
 
-      console.log('Dashboard clicked');
-      openDashboard();
+      body {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%);
+        background: linear-gradient(180deg, #0f4c75 0%, #3282b8 50%, #2a9d8f 100%);
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: white;
+        overflow: hidden;
+        position: relative;
+        padding: 0;
+        margin: 0;
+      }
+
+      /* Subtle texture overlay */
+      body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        pointer-events: none;
+      }
+
+      .container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 20px 20px 0 0;
+        padding: 2rem;
+        color: #333;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+      }
+
+      .ui-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .ui-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #2a5298;
+      }
+
+      .ui-subtitle {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 1.5rem;
+      }
+
+      .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #2a5298 0%, #0f4c75 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(42, 82, 152, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(42, 82, 152, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(42, 82, 152, 0.1);
+        color: #2a5298;
+        border: 1px solid rgba(42, 82, 152, 0.2);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(42, 82, 152, 0.15);
+        transform: translateY(-1px);
+      }
+
+      .stats {
+        display: flex;
+        justify-content: space-around;
+        margin: 1.5rem 0;
+        padding: 1rem;
+        background: rgba(42, 82, 152, 0.05);
+        border-radius: 12px;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2a5298;
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 0.25rem;
+      }
+
+      /* Responsive design */
+      @media (max-width: 480px) {
+        .container {
+          padding: 1.5rem;
+        }
+        
+        .ui-title {
+          font-size: 1.3rem;
+        }
+        
+        .btn {
+          padding: 0.9rem 1.5rem;
+          font-size: 0.9rem;
+        }
+        
+        .stats {
+          margin: 1rem 0;
+        }
+      }
+
+      /* Hamburger Menu Styles */
+      .hamburger-menu {
+        position: fixed;
+        top: 2rem;
+        left: 2rem;
+        z-index: 20;
+      }
+
+      .hamburger-cube {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .hamburger-cube:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: scale(1.05);
+      }
+
+      .hamburger-line {
+        width: 20px;
+        height: 2px;
+        background: white;
+        margin: 2px 0;
+        border-radius: 1px;
+        transition: all 0.3s ease;
+      }
+
+      .hamburger-cube.active .hamburger-line:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .hamburger-cube.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger-cube.active .hamburger-line:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+      }
+
+      .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 15;
+      }
+
+      .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .menu-items {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 0 12px 12px 12px;
+        padding: 1rem 0;
+        min-width: 150px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        transform: translateY(-20px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .menu-items.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .menu-item {
+        display: block;
+        width: 100%;
+        padding: 1rem 1.5rem;
+        background: none;
+        border: none;
+        color: #333;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: left;
+      }
+
+      .menu-item:hover {
+        background: rgba(42, 82, 152, 0.1);
+        color: #2a5298;
+        transform: translateX(5px);
+      }
+
+      .menu-item:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      /* Leaderboard Modal Styles */
+      .leaderboard-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 25;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .leaderboard-modal.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .leaderboard-content {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        width: 90%;
+        max-width: 400px;
+        max-height: 80vh;
+        padding: 2rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        transform: scale(0.8) translateY(50px);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .leaderboard-modal.active .leaderboard-content {
+        transform: scale(1) translateY(0);
+      }
+
+      .leaderboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(42, 82, 152, 0.2);
+      }
+
+      .leaderboard-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2a5298;
+        margin: 0;
+      }
+
+      .close-btn {
+        width: 30px;
+        height: 30px;
+        border: none;
+        background: rgba(42, 82, 152, 0.1);
+        border-radius: 50%;
+        color: #2a5298;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+      }
+
+      .close-btn:hover {
+        background: rgba(42, 82, 152, 0.2);
+        transform: scale(1.1);
+      }
+
+      .leaderboard-list {
+        max-height: 50vh;
+        overflow-y: auto;
+        padding-right: 0.5rem;
+      }
+
+      .leaderboard-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        background: rgba(42, 82, 152, 0.05);
+        border-radius: 12px;
+        transition: all 0.2s ease;
+        border: 1px solid rgba(42, 82, 152, 0.1);
+      }
+
+      .leaderboard-item:hover {
+        background: rgba(42, 82, 152, 0.1);
+        transform: translateX(5px);
+      }
+
+      .leaderboard-rank {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2a5298;
+        min-width: 30px;
+        margin-right: 1rem;
+      }
+
+      .leaderboard-rank.top-3 {
+        color: #ff6b35;
+        font-size: 1.1rem;
+      }
+
+      .leaderboard-avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2a5298, #0f4c75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-right: 1rem;
+      }
+
+      .leaderboard-info {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .leaderboard-name {
+        font-weight: 500;
+        color: #333;
+        font-size: 0.9rem;
+      }
+
+      .leaderboard-points {
+        font-weight: 600;
+        color: #2a5298;
+        font-size: 0.9rem;
+      }
+
+      /* Custom scrollbar */
+      .leaderboard-list::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .leaderboard-list::-webkit-scrollbar-track {
+        background: rgba(42, 82, 152, 0.1);
+        border-radius: 3px;
+      }
+
+      .leaderboard-list::-webkit-scrollbar-thumb {
+        background: rgba(42, 82, 152, 0.3);
+        border-radius: 3px;
+      }
+
+      .leaderboard-list::-webkit-scrollbar-thumb:hover {
+        background: rgba(42, 82, 152, 0.5);
+      }
+      @media (display-mode: standalone) {
+        body {
+          padding-top: env(safe-area-inset-top);
+          padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        .hamburger-menu {
+          top: calc(2rem + env(safe-area-inset-top));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Hamburger Menu -->
+    <div class="hamburger-menu">
+      <div class="hamburger-cube" onclick="toggleMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
+      
+      <div class="menu-items" id="menuItems">
+        <button class="menu-item" onclick="navigateToTasks()">Tasks</button>
+        <button class="menu-item" onclick="navigateToRoulette()">Roulette</button>
+        <button class="menu-item" onclick="navigateToMain()">Main</button>
+      </div>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+    <!-- Leaderboard Modal -->
+    <div class="leaderboard-modal" id="leaderboardModal">
+      <div class="leaderboard-content">
+        <div class="leaderboard-header">
+          <h2 class="leaderboard-title">🏆 Top Players</h2>
+          <button class="close-btn" onclick="closeLeaderboard()">×</button>
+        </div>
+        <div class="leaderboard-list" id="leaderboardList">
+          <!-- Leaderboard items will be generated here -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="ui-header">
+        <h1 class="ui-title">Welcome Back!</h1>
+        <p class="ui-subtitle">Manage your subscription and explore features</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number">156</div>
+          <div class="stat-label">Active Days</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">2.4K</div>
+          <div class="stat-label">Points</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">Gold</div>
+          <div class="stat-label">Tier</div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="handlePrimaryAction()">
+          View Dashboard
+        </button>
+        <button class="btn btn-secondary" onclick="handleSecondaryAction()">
+          Settings
+        </button>
+      </div>
+    </div>
+
+    <script>
+  if (window.Telegram && window.Telegram.WebApp) {
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.setHeaderColor('#0f4c75');
+    tg.ready();
+
+    if (tg.HapticFeedback) {
+      tg.HapticFeedback.notificationOccurred('success');
     }
+  }
 
-    function openDashboard() {
-      const dashboard = document.getElementById('dashboardPanel');
-      const leaderboard = document.getElementById('leaderboardList');
-      dashboard.style.display = 'flex';
+  let isMenuOpen = false;
 
-      const topPlayers = Array.from({ length: 30 }, (_, i) => ({
-        name: `Player${i + 1}`,
-        points: Math.floor(Math.random() * 5000)
-      }));
+  // ✅ Make toggleMenu globally accessible
+  window.toggleMenu = function () {
+    const cube = document.querySelector('.hamburger-cube');
+    const menuItems = document.getElementById('menuItems');
+    const overlay = document.getElementById('menuOverlay');
 
-      leaderboard.innerHTML = '';
+    isMenuOpen = !isMenuOpen;
 
-      topPlayers
-        .sort((a, b) => b.points - a.points)
-        .slice(0, 30)
-        .forEach((player, index) => {
-          const row = document.createElement('div');
-          row.className = 'leaderboard-entry';
-          row.innerHTML = `<span>#${index + 1} ${player.name}</span><span>${player.points} pts</span>`;
-          leaderboard.appendChild(row);
-        });
+    cube.classList.toggle('active', isMenuOpen);
+    menuItems.classList.toggle('active', isMenuOpen);
+    overlay.classList.toggle('active', isMenuOpen);
+
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+      window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
     }
+  };
 
-    function closeDashboard() {
-      document.getElementById('dashboardPanel').style.display = 'none';
-    }
+  window.closeMenu = function () {
+    if (isMenuOpen) toggleMenu();
+  };
 
-    setTheme();
-  </script>
-</body>
-</html>
+  window.navigateToTasks = function () {
+    console.log('Navigating to Tasks');
+    closeMenu();
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+  };
+
+  window.navigateToRoulette = function () {
+    console.log('Navigating to Roulette');
+    closeMenu();
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+  };
+
+  window.navigateToMain = function () {
+    console.log('Navigating to Main');
+    closeMenu();
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+  };
+
+  // ✅ Make this global for View Dashboard button
+  window.handlePrimaryAction = function () {
+    window.openLeaderboard();
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+  };
+
+  // ✅ Also make secondary action global if used inline
+  window.handleSecondaryAction = function () {
+    console.log('Settings clicked');
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+  };
+
+  window.openLeaderboard = function () {
+    document.getElementById('leaderboardModal').classList.add('active');
+    generateLeaderboardData();
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+  };
+
+  window.closeLeaderboard = function () {
+    document.getElementById('leaderboardModal').classList.remove('active');
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+  };
+
+  function generateLeaderboardData() {
+    const leaderboardList = document.getElementById('leaderboardList');
+    const players = [
+      { name: 'CryptoKing', points: 15420 },
+      { name: 'DiamondHands', points: 14890 },
+      { name: 'MoonRider', points: 13760 },
+      { name: 'BlockchainBoss', points: 12450 },
+      { name: 'TokenMaster', points: 11980 },
+      { name: 'DeFiLord', points: 11230 },
+      { name: 'NftCollector', points: 10890 },
+      { name: 'CoinHunter', points: 10450 },
+      { name: 'StakeHolder', points: 9870 },
+      { name: 'TradeGuru', points: 9560 },
+      { name: 'YieldFarmer', points: 9120 },
+      { name: 'LiquidityPro', points: 8760 },
+      { name: 'FlashLoan', points: 8450 },
+      { name: 'GasOptimizer', points: 8120 },
+      { name: 'SmartContract', points: 7890 },
+      { name: 'NodeRunner', points: 7560 },
+      { name: 'ValidatorX', points: 7230 },
+      { name: 'BridgeMaster', points: 6980 },
+      { name: 'SwapKing', points: 6750 },
+      { name: 'PoolProvider', points: 6420 },
+      { name: 'GovernanceVoter', points: 6180 },
+      { name: 'RewardHunter', points: 5950 },
+      { name: 'APYMaximizer', points: 5720 },
+      { name: 'RiskManager', points: 5490 },
+      { name: 'AlphaSeeker', points: 5260 },
+      { name: 'BetaTester', points: 5030 },
+      { name: 'EarlyAdopter', points: 4800 },
+      { name: 'InnovatorHub', points: 4570 },
+      { name: 'TechPioneer', points: 4340 },
+      { name: 'FutureBuilder', points: 4110 }
+    ];
+
+    leaderboardList.innerHTML = '';
+
+    players.forEach((player, index) => {
+      const rank = index + 1;
+      const isTopThree = rank <= 3;
+      const initials = player.name.substring(0, 2).toUpperCase();
+
+      const item = document.createElement('div');
+      item.className = 'leaderboard-item';
+      item.innerHTML = `
+        <div class="leaderboard-rank ${isTopThree ? 'top-3' : ''}">${rank}</div>
+        <div class="leaderboard-avatar">${initials}</div>
+        <div class="leaderboard-info">
+          <div class="leaderboard-name">${player.name}</div>
+          <div class="leaderboard-points">${player.points.toLocaleString()}</div>
+        </div>
+      `;
+
+      leaderboardList.appendChild(item);
+    });
+  }
+</script>
