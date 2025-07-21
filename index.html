@@ -657,14 +657,14 @@
 
       const item = document.createElement('div');
       item.className = 'leaderboard-item';
-      item.innerHTML = `
+      item.innerHTML = 
         <div class="leaderboard-rank ${isTopThree ? 'top-3' : ''}">${rank}</div>
         <div class="leaderboard-avatar">${initials}</div>
         <div class="leaderboard-info">
           <div class="leaderboard-name">${player.name}</div>
           <div class="leaderboard-points">${player.points.toLocaleString()}</div>
         </div>
-      `;
+      ;
 
       leaderboardList.appendChild(item);
     };
@@ -687,7 +687,7 @@ window.changeLanguage = function (lang) {
 window.updateVolume = function (value) {
   localStorage.setItem('volume', value);
   // You can link this to your game's audio system
-  console.log(`Master volume set to ${value}`);
+  console.log(Master volume set to ${value});
 };
 
 // 🈯 Language Dictionary (expand as needed)
@@ -759,6 +759,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const savedVolume = localStorage.getItem('volume') || '1';
   document.getElementById('volumeSlider').value = savedVolume;
-});
+    });
   }
-</script>
+</script> 
