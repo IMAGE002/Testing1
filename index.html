@@ -614,62 +614,39 @@
   };
 
   function generateLeaderboardData() {
-    const leaderboardList = document.getElementById('leaderboardList');
-    const players = [
-      { name: 'CryptoKing', points: 15420 },
-      { name: 'DiamondHands', points: 14890 },
-      { name: 'MoonRider', points: 13760 },
-      { name: 'BlockchainBoss', points: 12450 },
-      { name: 'TokenMaster', points: 11980 },
-      { name: 'DeFiLord', points: 11230 },
-      { name: 'NftCollector', points: 10890 },
-      { name: 'CoinHunter', points: 10450 },
-      { name: 'StakeHolder', points: 9870 },
-      { name: 'TradeGuru', points: 9560 },
-      { name: 'YieldFarmer', points: 9120 },
-      { name: 'LiquidityPro', points: 8760 },
-      { name: 'FlashLoan', points: 8450 },
-      { name: 'GasOptimizer', points: 8120 },
-      { name: 'SmartContract', points: 7890 },
-      { name: 'NodeRunner', points: 7560 },
-      { name: 'ValidatorX', points: 7230 },
-      { name: 'BridgeMaster', points: 6980 },
-      { name: 'SwapKing', points: 6750 },
-      { name: 'PoolProvider', points: 6420 },
-      { name: 'GovernanceVoter', points: 6180 },
-      { name: 'RewardHunter', points: 5950 },
-      { name: 'APYMaximizer', points: 5720 },
-      { name: 'RiskManager', points: 5490 },
-      { name: 'AlphaSeeker', points: 5260 },
-      { name: 'BetaTester', points: 5030 },
-      { name: 'EarlyAdopter', points: 4800 },
-      { name: 'InnovatorHub', points: 4570 },
-      { name: 'TechPioneer', points: 4340 },
-      { name: 'FutureBuilder', points: 4110 }
-    ];
+  const leaderboardList = document.getElementById('leaderboardList');
+  const players = [
+    { name: 'CryptoKing', points: 15420 },
+    { name: 'DiamondHands', points: 14890 },
+    { name: 'MoonRider', points: 13760 },
+    { name: 'BlockchainBoss', points: 12450 },
+    { name: 'TokenMaster', points: 11980 },
+    // ye
+  ];
 
-    leaderboardList.innerHTML = '';
+  leaderboardList.innerHTML = '';
 
-    players.forEach((player, index) => {
-      const rank = index + 1;
-      const isTopThree = rank <= 3;
-      const initials = player.name.substring(0, 2).toUpperCase();
+  players.forEach((player, index) => {
+    const rank = index + 1;
+    const isTopThree = rank <= 3;
+    const initials = player.name.substring(0, 2).toUpperCase();
 
-      const item = document.createElement('div');
-      item.className = 'leaderboard-item';
-      item.innerHTML = 
-        <div class="leaderboard-rank ${isTopThree ? 'top-3' : ''}">${rank}</div>
-        <div class="leaderboard-avatar">${initials}</div>
-        <div class="leaderboard-info">
-          <div class="leaderboard-name">${player.name}</div>
-          <div class="leaderboard-points">${player.points.toLocaleString()}</div>
-        </div>
-      ;
+    const item = document.createElement('div');
+    item.className = 'leaderboard-item';
+    item.innerHTML = `
+      <div class="leaderboard-rank ${isTopThree ? 'top-3' : ''}">${rank}</div>
+      <div class="leaderboard-avatar">${initials}</div>
+      <div class="leaderboard-info">
+        <div class="leaderboard-name">${player.name}</div>
+        <div class="leaderboard-points">${player.points.toLocaleString()}</div>
+      </div>
+    `;
 
-      leaderboardList.appendChild(item);
-    };
+    leaderboardList.appendChild(item);
+  });
+}
 
-    window.openSettings = function () {
+ window.openSettings = function () {
   document.getElementById('settingsModal').classList.add('active');
   window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
 };
