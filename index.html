@@ -455,9 +455,9 @@
       </div>
       
       <div class="menu-items" id="menuItems">
-        <button class="menu-item" onclick="navigateToTasks()">Tasks</button>
-        <button class="menu-item" onclick="navigateToRoulette()">Roulette</button>
-        <button class="menu-item" onclick="navigateToMain()">Main</button>
+        <button class="menu-item" onclick="navigateToTasks()" data-i18n="tasks">Tasks</button>
+        <button class="menu-item" onclick="navigateToRoulette()" data-i18n="roulette">Roulette</button>
+        <button class="menu-item" onclick="navigateToMain()" data-i18n="main">Main</button>
       </div>
     </div>
 
@@ -468,7 +468,7 @@
     <div class="leaderboard-modal" id="leaderboardModal">
       <div class="leaderboard-content">
         <div class="leaderboard-header">
-          <h2 class="leaderboard-title">🏆 Top Players</h2>
+          <h2 class="leaderboard-title" data-i18n="topPlayers">🏆 Top Players</h2>
           <button class="close-btn" onclick="closeLeaderboard()">×</button>
         </div>
         <div class="leaderboard-list" id="leaderboardList">
@@ -479,278 +479,301 @@
 
     <div class="container">
       <div class="ui-header">
-        <h1 class="ui-title">Welcome Back!</h1>
-        <p class="ui-subtitle">Manage your subscription and explore features</p>
+        <h1 class="ui-title" data-i18n="welcomeBack">Welcome Back!</h1>
+        <p class="ui-subtitle" data-i18n="manageSubscription">Manage your subscription and explore features</p>
       </div>
 
       <div class="stats">
         <div class="stat-item">
           <div class="stat-number">156</div>
-          <div class="stat-label">Active Days</div>
+          <div class="stat-label" data-i18n="activeDays">Active Days</div>
         </div>
         <div class="stat-item">
           <div class="stat-number">2.4K</div>
-          <div class="stat-label">Points</div>
+          <div class="stat-label" data-i18n="points">Points</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number">Gold</div>
-          <div class="stat-label">Tier</div>
+          <div class="stat-number" data-i18n="gold">Gold</div>
+          <div class="stat-label" data-i18n="tier">Tier</div>
         </div>
       </div>
 
       <div class="button-group">
-        <button class="btn btn-primary" onclick="handlePrimaryAction()">
+        <button class="btn btn-primary" onclick="handlePrimaryAction()" data-i18n="viewDashboard">
           View Dashboard
         </button>
-        <button class="btn btn-secondary" onclick="handleSecondaryAction()">
+        <button class="btn btn-secondary" onclick="handleSecondaryAction()" data-i18n="settings">
           Settings
         </button>
       </div>
     </div>
 
     <!-- Settings Modal -->
-<div class="leaderboard-modal" id="settingsModal">
-  <div class="leaderboard-content">
-    <div class="leaderboard-header">
-      <h2 class="leaderboard-title" data-i18n="settingsTitle">⚙️ Settings</h2>
-      <button class="close-btn" onclick="closeSettings()">×</button>
-    </div>
+    <div class="leaderboard-modal" id="settingsModal">
+      <div class="leaderboard-content">
+        <div class="leaderboard-header">
+          <h2 class="leaderboard-title" data-i18n="settingsTitle">⚙️ Settings</h2>
+          <button class="close-btn" onclick="closeSettings()">×</button>
+        </div>
 
-    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-      <!-- Language -->
-      <div>
-        <label for="languageSelect" class="stat-label" data-i18n="languageLabel">Language</label>
-        <select id="languageSelect" class="btn btn-secondary" onchange="changeLanguage(this.value)">
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="ru">Русский</option>
-        </select>
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <!-- Language -->
+          <div>
+            <label for="languageSelect" class="stat-label" data-i18n="languageLabel">Language</label>
+            <select id="languageSelect" class="btn btn-secondary" onchange="changeLanguage(this.value)">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="ru">Русский</option>
+            </select>
+          </div>
+
+          <!-- Volume -->
+          <div>
+            <label for="volumeSlider" class="stat-label" data-i18n="volumeLabel">Music Volume</label>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" oninput="updateVolume(this.value)">
+          </div>
+        </div>
       </div>
-
-      <!-- Volume -->
-      <div>
-        <label for="volumeSlider" class="stat-label" data-i18n="volumeLabel">Music Volume</label>
-        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" oninput="updateVolume(this.value)">
-      </div>
     </div>
-  </div>
-</div>
-
 
     <script>
-  if (window.Telegram && window.Telegram.WebApp) {
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.setHeaderColor('#0f4c75');
-    tg.ready();
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.setHeaderColor('#0f4c75');
+        tg.ready();
 
-    if (tg.HapticFeedback) {
-      tg.HapticFeedback.notificationOccurred('success');
-    }
-  }
-
-  let isMenuOpen = false;
-
-  window.toggleMenu = function () {
-    const cube = document.querySelector('.hamburger-cube');
-    const menuItems = document.getElementById('menuItems');
-    const overlay = document.getElementById('menuOverlay');
-
-    isMenuOpen = !isMenuOpen;
-
-    cube.classList.toggle('active', isMenuOpen);
-    menuItems.classList.toggle('active', isMenuOpen);
-    overlay.classList.toggle('active', isMenuOpen);
-
-    if (window.Telegram?.WebApp?.HapticFeedback) {
-      window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
-    }
-  };
-
-  window.closeMenu = function () {
-    if (isMenuOpen) toggleMenu();
-  };
-
-  window.navigateToTasks = function () {
-    console.log('Navigating to Tasks');
-    closeMenu();
-    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
-  };
-
-  window.navigateToRoulette = function () {
-    console.log('Navigating to Roulette');
-    closeMenu();
-    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
-  };
-
-  window.navigateToMain = function () {
-    console.log('Navigating to Main');
-    closeMenu();
-    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
-  };
-
-  window.handlePrimaryAction = function () {
-    window.openLeaderboard();
-    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
-  };
-
-  window.handleSecondaryAction = function () {
-    console.log('Settings clicked');
-    window.openSettings();
-    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-  };
-
-  window.openLeaderboard = function () {
-    document.getElementById('leaderboardModal').classList.add('active');
-    generateLeaderboardData();
-    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-  };
-
-  window.closeLeaderboard = function () {
-    document.getElementById('leaderboardModal').classList.remove('active');
-    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-  };
-
-  function generateLeaderboardData() {
-    const leaderboardList = document.getElementById('leaderboardList');
-    const players = [
-      { name: 'CryptoKing', points: 15420 },
-      { name: 'DiamondHands', points: 14890 },
-      { name: 'MoonRider', points: 13760 },
-      { name: 'BlockchainBoss', points: 12450 },
-      { name: 'TokenMaster', points: 11980 },
-      { name: 'DeFiLord', points: 11230 },
-      { name: 'NftCollector', points: 10890 },
-      { name: 'CoinHunter', points: 10450 },
-      { name: 'StakeHolder', points: 9870 },
-      { name: 'TradeGuru', points: 9560 },
-      { name: 'YieldFarmer', points: 9120 },
-      { name: 'LiquidityPro', points: 8760 },
-      { name: 'FlashLoan', points: 8450 },
-      { name: 'GasOptimizer', points: 8120 },
-      { name: 'SmartContract', points: 7890 },
-      { name: 'NodeRunner', points: 7560 },
-      { name: 'ValidatorX', points: 7230 },
-      { name: 'BridgeMaster', points: 6980 },
-      { name: 'SwapKing', points: 6750 },
-      { name: 'PoolProvider', points: 6420 },
-      { name: 'GovernanceVoter', points: 6180 },
-      { name: 'RewardHunter', points: 5950 },
-      { name: 'APYMaximizer', points: 5720 },
-      { name: 'RiskManager', points: 5490 },
-      { name: 'AlphaSeeker', points: 5260 },
-      { name: 'BetaTester', points: 5030 },
-      { name: 'EarlyAdopter', points: 4800 },
-      { name: 'InnovatorHub', points: 4570 },
-      { name: 'TechPioneer', points: 4340 },
-      { name: 'FutureBuilder', points: 4110 }
-    ];
-
-    leaderboardList.innerHTML = '';
-
-    players.forEach((player, index) => {
-      const rank = index + 1;
-      const isTopThree = rank <= 3;
-      const initials = player.name.substring(0, 2).toUpperCase();
-
-      const item = document.createElement('div');
-      item.className = 'leaderboard-item';
-      item.innerHTML = `
-        <div class="leaderboard-rank ${isTopThree ? 'top-3' : ''}">${rank}</div>
-        <div class="leaderboard-avatar">${initials}</div>
-        <div class="leaderboard-info">
-          <div class="leaderboard-name">${player.name}</div>
-          <div class="leaderboard-points">${player.points.toLocaleString()}</div>
-        </div>
-      `;
-      leaderboardList.appendChild(item);
-    });
-  }
-
-  window.openSettings = function () {
-    document.getElementById('settingsModal').classList.add('active');
-    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-  };
-
-  window.closeSettings = function () {
-    document.getElementById('settingsModal').classList.remove('active');
-    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-  };
-
-  window.changeLanguage = function (lang) {
-    localStorage.setItem('lang', lang);
-    applyTranslations(lang);
-  };
-
-  window.updateVolume = function (value) {
-    localStorage.setItem('volume', value);
-    console.log(`Master volume set to ${value}`);
-  };
-
-  const translations = {
-    en: {
-      settingsTitle: "⚙️ Settings",
-      languageLabel: "Language",
-      volumeLabel: "Music Volume",
-      'Welcome Back!': "Welcome Back!",
-      'Manage your subscription and explore features': "Manage your subscription and explore features",
-      'Active Days': "Active Days",
-      'Points': "Points",
-      'Tier': "Tier",
-      'View Dashboard': "View Dashboard",
-      'Settings': "Settings"
-    },
-    es: {
-      settingsTitle: "⚙️ Ajustes",
-      languageLabel: "Idioma",
-      volumeLabel: "Volumen de música",
-      'Welcome Back!': "¡Bienvenido!",
-      'Manage your subscription and explore features': "Administra tu suscripción y explora funciones",
-      'Active Days': "Días Activos",
-      'Points': "Puntos",
-      'Tier': "Categoría",
-      'View Dashboard': "Ver Panel",
-      'Settings': "Ajustes"
-    },
-    ru: {
-      settingsTitle: "⚙️ Настройки",
-      languageLabel: "Язык",
-      volumeLabel: "Громкость музыки",
-      'Welcome Back!': "С возвращением!",
-      'Manage your subscription and explore features': "Управляй подпиской и исследуй функции",
-      'Active Days': "Активные дни",
-      'Points': "Очки",
-      'Tier': "Уровень",
-      'View Dashboard': "Панель",
-      'Settings': "Настройки"
-    }
-  };
-
-  function applyTranslations(lang) {
-    const dictionary = translations[lang] || translations['en'];
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (dictionary[key]) {
-        el.textContent = dictionary[key];
+        if (tg.HapticFeedback) {
+          tg.HapticFeedback.notificationOccurred('success');
+        }
       }
-    });
 
-    const staticKeys = Object.keys(dictionary).filter(k => !k.includes('.'));
-    staticKeys.forEach(original => {
-      const nodes = Array.from(document.querySelectorAll("*")).filter(el => el.childNodes.length === 1 && el.childNodes[0].nodeType === 3 && el.textContent.trim() === original);
-      nodes.forEach(node => {
-        node.textContent = dictionary[original];
+      let isMenuOpen = false;
+
+      window.toggleMenu = function () {
+        const cube = document.querySelector('.hamburger-cube');
+        const menuItems = document.getElementById('menuItems');
+        const overlay = document.getElementById('menuOverlay');
+
+        isMenuOpen = !isMenuOpen;
+
+        cube.classList.toggle('active', isMenuOpen);
+        menuItems.classList.toggle('active', isMenuOpen);
+        overlay.classList.toggle('active', isMenuOpen);
+
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+          window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+      };
+
+      window.closeMenu = function () {
+        if (isMenuOpen) toggleMenu();
+      };
+
+      window.navigateToTasks = function () {
+        console.log('Navigating to Tasks');
+        closeMenu();
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+      };
+
+      window.navigateToRoulette = function () {
+        console.log('Navigating to Roulette');
+        closeMenu();
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+      };
+
+      window.navigateToMain = function () {
+        console.log('Navigating to Main');
+        closeMenu();
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+      };
+
+      window.handlePrimaryAction = function () {
+        window.openLeaderboard();
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+      };
+
+      window.handleSecondaryAction = function () {
+        console.log('Settings clicked');
+        window.openSettings();
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+      };
+
+      window.openLeaderboard = function () {
+        document.getElementById('leaderboardModal').classList.add('active');
+        generateLeaderboardData();
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+      };
+
+      window.closeLeaderboard = function () {
+        document.getElementById('leaderboardModal').classList.remove('active');
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+      };
+
+      function generateLeaderboardData() {
+        const leaderboardList = document.getElementById('leaderboardList');
+        const players = [
+          { name: 'CryptoKing', points: 15420 },
+          { name: 'DiamondHands', points: 14890 },
+          { name: 'MoonRider', points: 13760 },
+          { name: 'BlockchainBoss', points: 12450 },
+          { name: 'TokenMaster', points: 11980 },
+          { name: 'DeFiLord', points: 11230 },
+          { name: 'NftCollector', points: 10890 },
+          { name: 'CoinHunter', points: 10450 },
+          { name: 'StakeHolder', points: 9870 },
+          { name: 'TradeGuru', points: 9560 },
+          { name: 'YieldFarmer', points: 9120 },
+          { name: 'LiquidityPro', points: 8760 },
+          { name: 'FlashLoan', points: 8450 },
+          { name: 'GasOptimizer', points: 8120 },
+          { name: 'SmartContract', points: 7890 },
+          { name: 'NodeRunner', points: 7560 },
+          { name: 'ValidatorX', points: 7230 },
+          { name: 'BridgeMaster', points: 6980 },
+          { name: 'SwapKing', points: 6750 },
+          { name: 'PoolProvider', points: 6420 },
+          { name: 'GovernanceVoter', points: 6180 },
+          { name: 'RewardHunter', points: 5950 },
+          { name: 'APYMaximizer', points: 5720 },
+          { name: 'RiskManager', points: 5490 },
+          { name: 'AlphaSeeker', points: 5260 },
+          { name: 'BetaTester', points: 5030 },
+          { name: 'EarlyAdopter', points: 4800 },
+          { name: 'InnovatorHub', points: 4570 },
+          { name: 'TechPioneer', points: 4340 },
+          { name: 'FutureBuilder', points: 4110 }
+        ];
+
+        leaderboardList.innerHTML = '';
+
+        players.forEach((player, index) => {
+          const rank = index + 1;
+          const isTopThree = rank <= 3;
+          const initials = player.name.substring(0, 2).toUpperCase();
+
+          const item = document.createElement('div');
+          item.className = 'leaderboard-item';
+          item.innerHTML = `
+            <div class="leaderboard-rank ${isTopThree ? 'top-3' : ''}">${rank}</div>
+            <div class="leaderboard-avatar">${initials}</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">${player.name}</div>
+              <div class="leaderboard-points">${player.points.toLocaleString()}</div>
+            </div>
+          `;
+          leaderboardList.appendChild(item);
+        });
+      }
+
+      window.openSettings = function () {
+        document.getElementById('settingsModal').classList.add('active');
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+      };
+
+      window.closeSettings = function () {
+        document.getElementById('settingsModal').classList.remove('active');
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+      };
+
+      window.changeLanguage = function (lang) {
+        // Store language preference (without using localStorage as per requirements)
+        window.currentLanguage = lang;
+        applyTranslations(lang);
+        
+        // Update the select to show the chosen language
+        document.getElementById('languageSelect').value = lang;
+        
+        console.log(`Language changed to: ${lang}`);
+      };
+
+      window.updateVolume = function (value) {
+        // Store volume preference (without using localStorage as per requirements)
+        window.currentVolume = value;
+        console.log(`Master volume set to ${value}`);
+      };
+
+      // Translation dictionary
+      const translations = {
+        en: {
+          settingsTitle: "⚙️ Settings",
+          languageLabel: "Language",
+          volumeLabel: "Music Volume",
+          welcomeBack: "Welcome Back!",
+          manageSubscription: "Manage your subscription and explore features",
+          activeDays: "Active Days",
+          points: "Points",
+          tier: "Tier",
+          gold: "Gold",
+          viewDashboard: "View Dashboard",
+          settings: "Settings",
+          topPlayers: "🏆 Top Players",
+          tasks: "Tasks",
+          roulette: "Roulette",
+          main: "Main"
+        },
+        es: {
+          settingsTitle: "⚙️ Ajustes",
+          languageLabel: "Idioma",
+          volumeLabel: "Volumen de música",
+          welcomeBack: "¡Bienvenido!",
+          manageSubscription: "Administra tu suscripción y explora funciones",
+          activeDays: "Días Activos",
+          points: "Puntos",
+          tier: "Categoría",
+          gold: "Oro",
+          viewDashboard: "Ver Panel",
+          settings: "Ajustes",
+          topPlayers: "🏆 Mejores Jugadores",
+          tasks: "Tareas",
+          roulette: "Ruleta",
+          main: "Principal"
+        },
+        ru: {
+          settingsTitle: "⚙️ Настройки",
+          languageLabel: "Язык",
+          volumeLabel: "Громкость музыки",
+          welcomeBack: "С возвращением!",
+          manageSubscription: "Управляй подпиской и исследуй функции",
+          activeDays: "Активные дни",
+          points: "Очки",
+          tier: "Уровень",
+          gold: "Золото",
+          viewDashboard: "Панель",
+          settings: "Настройки",
+          topPlayers: "🏆 Лучшие Игроки",
+          tasks: "Задачи",
+          roulette: "Рулетка",
+          main: "Главная"
+        }
+      };
+
+      // Apply translations function
+      function applyTranslations(lang) {
+        const dictionary = translations[lang] || translations['en'];
+
+        // Update all elements with data-i18n attributes
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+          const key = element.getAttribute('data-i18n');
+          if (dictionary[key]) {
+            element.textContent = dictionary[key];
+          }
+        });
+      }
+
+      // Initialize app on DOM content loaded
+      window.addEventListener('DOMContentLoaded', () => {
+        // Initialize with English as default
+        window.currentLanguage = 'en';
+        window.currentVolume = '1';
+        
+        // Apply initial translations
+        applyTranslations(window.currentLanguage);
+        
+        // Set initial values
+        document.getElementById('languageSelect').value = window.currentLanguage;
+        document.getElementById('volumeSlider').value = window.currentVolume;
       });
-    });
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('lang') || 'en';
-    applyTranslations(savedLang);
-    document.getElementById('languageSelect').value = savedLang;
-
-    const savedVolume = localStorage.getItem('volume') || '1';
-    document.getElementById('volumeSlider').value = savedVolume;
-  });
-</script>
+    </script>
+  </body>
+</html>
