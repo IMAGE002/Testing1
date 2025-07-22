@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -247,7 +248,8 @@
       }
 
       .menu-item {
-        display: block;
+        display: flex;
+        align-items: center;
         width: 100%;
         padding: 1rem 1.5rem;
         background: none;
@@ -256,8 +258,9 @@
         font-size: 0.9rem;
         font-weight: 500;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
         text-align: left;
+        position: relative;
       }
 
       .menu-item:hover {
@@ -268,6 +271,34 @@
 
       .menu-item:not(:last-child) {
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      /* Active menu item styles */
+      .menu-item.active {
+        background: linear-gradient(135deg, rgba(42, 82, 152, 0.15) 0%, rgba(42, 82, 152, 0.25) 100%);
+        color: #2a5298;
+        font-weight: 600;
+        transform: translateX(8px);
+        box-shadow: inset 4px 0 0 #2a5298;
+      }
+
+      .menu-item.active::before {
+        content: '●';
+        position: absolute;
+        left: 0.75rem;
+        color: #2a5298;
+        font-size: 0.8rem;
+        animation: pulse 2s infinite;
+      }
+
+      .menu-item.active .menu-text {
+        margin-left: 0.5rem;
+      }
+
+      @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
       }
 
       /* Leaderboard Modal Styles */
@@ -433,6 +464,103 @@
       .leaderboard-list::-webkit-scrollbar-thumb:hover {
         background: rgba(42, 82, 152, 0.5);
       }
+
+      /* Roulette Page Styles */
+      .roulette-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-top: 1rem;
+      }
+
+      .roulette-btn {
+        padding: 1.5rem 2rem;
+        border-radius: 20px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
+        overflow: hidden;
+        min-height: 100px;
+        transition: all 0.4s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .roulette-btn-1 {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+      }
+
+      .roulette-btn-2 {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+      }
+
+      .roulette-btn-3 {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+      }
+
+      .roulette-btn:hover {
+        transform: translateY(-5px) scale(1.02);
+      }
+
+      .roulette-btn-1:hover {
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+      }
+
+      .roulette-btn-2:hover {
+        box-shadow: 0 15px 35px rgba(240, 147, 251, 0.4);
+      }
+
+      .roulette-btn-3:hover {
+        box-shadow: 0 15px 35px rgba(79, 172, 254, 0.4);
+      }
+
+      .roulette-btn-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+      }
+
+      .roulette-btn-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      }
+
+      .roulette-btn-desc {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        font-weight: 400;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      }
+
+      /* Animated background patterns */
+      .roulette-btn::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+        transform: rotate(45deg);
+        transition: all 0.6s ease;
+        opacity: 0;
+      }
+
+      .roulette-btn:hover::before {
+        opacity: 1;
+        right: 100%;
+      }
+
       @media (display-mode: standalone) {
         body {
           padding-top: env(safe-area-inset-top);
@@ -441,6 +569,25 @@
         
         .hamburger-menu {
           top: calc(2rem + env(safe-area-inset-top));
+        }
+      }
+
+      @media (max-width: 480px) {
+        .roulette-btn {
+          padding: 1.25rem 1.5rem;
+          min-height: 90px;
+        }
+        
+        .roulette-btn-icon {
+          font-size: 1.8rem;
+        }
+        
+        .roulette-btn-title {
+          font-size: 1.1rem;
+        }
+        
+        .roulette-btn-desc {
+          font-size: 0.85rem;
         }
       }
     </style>
@@ -455,9 +602,15 @@
       </div>
       
       <div class="menu-items" id="menuItems">
-        <button class="menu-item" onclick="navigateToTasks()" data-i18n="tasks">Tasks</button>
-        <button class="menu-item" onclick="navigateToRoulette()" data-i18n="roulette">Roulette</button>
-        <button class="menu-item" onclick="navigateToMain()" data-i18n="main">Main</button>
+        <button class="menu-item" id="tasksMenuItem" onclick="navigateToTasks()">
+          <span class="menu-text" data-i18n="tasks">Tasks</span>
+        </button>
+        <button class="menu-item" id="rouletteMenuItem" onclick="navigateToRoulette()">
+          <span class="menu-text" data-i18n="roulette">Roulette</span>
+        </button>
+        <button class="menu-item active" id="mainMenuItem" onclick="navigateToMain()">
+          <span class="menu-text" data-i18n="main">Main</span>
+        </button>
       </div>
     </div>
 
@@ -477,7 +630,8 @@
       </div>
     </div>
 
-    <div class="container">
+    <!-- Main Page -->
+    <div class="container" id="mainPage">
       <div class="ui-header">
         <h1 class="ui-title" data-i18n="welcomeBack">Welcome Back!</h1>
         <p class="ui-subtitle" data-i18n="manageSubscription">Manage your subscription and explore features</p>
@@ -504,6 +658,34 @@
         </button>
         <button class="btn btn-secondary" onclick="handleSecondaryAction()" data-i18n="settings">
           Settings
+        </button>
+      </div>
+    </div>
+
+    <!-- Roulette Page -->
+    <div class="container" id="roulettePage" style="display: none;">
+      <div class="ui-header">
+        <h1 class="ui-title" data-i18n="rouletteTitle">🎰 Lucky Roulette</h1>
+        <p class="ui-subtitle" data-i18n="rouletteSubtitle">Choose your game and win amazing prizes!</p>
+      </div>
+
+      <div class="roulette-buttons">
+        <button class="btn roulette-btn roulette-btn-1" onclick="handleRouletteGame('classic')">
+          <div class="roulette-btn-icon">🎯</div>
+          <div class="roulette-btn-title" data-i18n="classicRoulette">Classic Roulette</div>
+          <div class="roulette-btn-desc" data-i18n="classicDesc">Win up to 1000 points</div>
+        </button>
+        
+        <button class="btn roulette-btn roulette-btn-2" onclick="handleRouletteGame('premium')">
+          <div class="roulette-btn-icon">💎</div>
+          <div class="roulette-btn-title" data-i18n="premiumRoulette">Premium Spin</div>
+          <div class="roulette-btn-desc" data-i18n="premiumDesc">Exclusive rewards await</div>
+        </button>
+        
+        <button class="btn roulette-btn roulette-btn-3" onclick="handleRouletteGame('mega')">
+          <div class="roulette-btn-icon">🚀</div>
+          <div class="roulette-btn-title" data-i18n="megaRoulette">Mega Jackpot</div>
+          <div class="roulette-btn-desc" data-i18n="megaDesc">Huge prizes & bonuses</div>
         </button>
       </div>
     </div>
@@ -549,6 +731,38 @@
       }
 
       let isMenuOpen = false;
+      let currentPage = 'main'; // Track current page
+
+      // Function to show specific page
+      function showPage(page) {
+        // Hide all pages
+        document.getElementById('mainPage').style.display = 'none';
+        document.getElementById('roulettePage').style.display = 'none';
+        
+        // Show requested page
+        if (page === 'main') {
+          document.getElementById('mainPage').style.display = 'block';
+        } else if (page === 'roulette') {
+          document.getElementById('roulettePage').style.display = 'block';
+        }
+        // Add more pages here as needed
+      }
+
+      // Function to set active menu item
+      function setActiveMenuItem(page) {
+        // Remove active class from all menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+          item.classList.remove('active');
+        });
+
+        // Add active class to current page menu item
+        const menuItem = document.getElementById(page + 'MenuItem');
+        if (menuItem) {
+          menuItem.classList.add('active');
+        }
+
+        currentPage = page;
+      }
 
       window.toggleMenu = function () {
         const cube = document.querySelector('.hamburger-cube');
@@ -572,20 +786,41 @@
 
       window.navigateToTasks = function () {
         console.log('Navigating to Tasks');
+        setActiveMenuItem('tasks');
+        showPage('tasks');
         closeMenu();
         window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
       };
 
       window.navigateToRoulette = function () {
         console.log('Navigating to Roulette');
+        setActiveMenuItem('roulette');
+        showPage('roulette');
         closeMenu();
         window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
       };
 
       window.navigateToMain = function () {
         console.log('Navigating to Main');
+        setActiveMenuItem('main');
+        showPage('main');
         closeMenu();
         window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+      };
+
+      window.handleRouletteGame = function (gameType) {
+        console.log(`Starting ${gameType} roulette game`);
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('heavy');
+        
+        // Here you would implement the actual roulette game logic
+        // For now, just show a simple alert
+        const gameNames = {
+          classic: 'Classic Roulette',
+          premium: 'Premium Spin',
+          mega: 'Mega Jackpot'
+        };
+        
+        alert(`Starting ${gameNames[gameType]}! Game logic would go here.`);
       };
 
       window.handlePrimaryAction = function () {
